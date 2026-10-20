@@ -1,0 +1,32 @@
+{
+  "question": "Can a class-balanced, isotonic-calibrated LightGBM model give more reliable win/loss judgements than a standard random forest on game states, as a small stand-in for checking a player's reading of game rules?",
+  "method": "Stratified 75/25 split (seed 42) of OpenML tic-tac-toe endgame data; one-hot encoded cells; baseline 300-tree random forest vs. class-balanced LightGBM with 5-fold CV grid search and isotonic calibration; seeds 42-44; accuracy main, F1/Brier/log loss secondary.",
+  "dataset": {
+    "name": "Tic-Tac-Toe Endgame (OpenML data_id 50)",
+    "source_url": "https://www.openml.org/d/50",
+    "n_rows": 958,
+    "n_train": 718,
+    "n_test": 240,
+    "same_as_paper": false,
+    "baseline_is_papers_method": false
+  },
+  "metric_name": "test accuracy",
+  "higher_is_better": true,
+  "baseline": "Standard RandomForestClassifier (300 trees) on one-hot cells, raw probabilities.",
+  "improved": "LightGBM with class_weight='balanced', hyper-parameters chosen by 5-fold CV grid search on the training set (neg. log loss), wrapped in isotonic calibration (5-fold internal CV on training data).",
+  "metrics": {
+    "n_seeds": 3,
+    "baseline_score": 0.9680555555555556,
+    "baseline_score_std": 0.003928371006591917,
+    "baseline_f1": 0.9761741719150359,
+    "baseline_brier": 0.0582325,
+    "baseline_logloss": 0.24161840493277587,
+    "improved_score": 0.9986111111111112,
+    "improved_score_std": 0.0019641855032959585,
+    "improved_f1": 0.9989417989417989,
+    "improved_brier": 0.0015015585757720562,
+    "improved_logloss": 0.007564755106072597,
+    "improvement": 0.03055555555555567
+  },
+  "notes": "Stand-in experiment, not a replication of the paper's logic-based method. Only one stratified split was used (seed 42) per the split-once rule; seeds 42-44 vary the models only, so the std reflects model randomness, not split variability. The test set (about 240 rows) is small, so accuracy differences of a few points are within noise. Grid search and calibration use only training data. fetch_openml takes no timeout argument, so a socket-level 60 s timeout is set globally. Compute is matched only roughly: the improved model runs a small grid search plus calibration."
+}
