@@ -19,6 +19,29 @@ python analysis.py
 
 Results: results are written to results.json (and a chart to figures/).
 
+## Results (latest run)
+
+On the Tic-Tac-Toe Endgame dataset (OpenML data_id 50), a standard 300-tree random forest on raw probabilities reached 96.8% test accuracy, while my class-balanced, isotonic-calibrated LightGBM reached 99.9% on the same 240-row split, a modest gain on a single small split.
+
+| Metric | Value |
+|---|---|
+| n_seeds | 3 |
+| baseline_score | 0.9681 |
+| baseline_score_std | 0.003928 |
+| baseline_f1 | 0.9762 |
+| baseline_brier | 0.05823 |
+| baseline_logloss | 0.2416 |
+| improved_score | 0.9986 |
+| improved_score_std | 0.001964 |
+| improved_f1 | 0.9989 |
+| improved_brier | 0.001502 |
+| improved_logloss | 0.007565 |
+| improvement | 0.03056 |
+
+Run on 2026-10-20. Full output: [results.json](results.json) · [run.log](run.log)
+
+Notes: Stand-in experiment, not a replication of the paper's logic-based method. Only one stratified split was used (seed 42) per the split-once rule; seeds 42-44 vary the models only, so the std reflects model randomness, not split variability. The test set (about 240 rows) is small, so accuracy differences of a few points are within noise. Grid search and calibration use only training data. fetch_openml takes no timeout argument, so a socket-level 60 s timeout is set globally. Compute is matched only roughly: the improved model runs a small grid search plus calibration.
+
 ## Reference
 
 This project is motivated by the following paper:
